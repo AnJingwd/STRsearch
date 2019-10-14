@@ -101,8 +101,8 @@ def STR_parse(sample,sex,marker_name,input_file,marker,position,pattern):
     else:
         merge.insert(1,allele_adjust_info)
         result_part2 = merge
-    result_str ="\t".join(result_part1+result_part2)
-    return result_str,support_reads_sorted
+    result_list =result_part1+result_part2
+    return result_list,support_reads_sorted
 
 
 def count_lines(file):
@@ -178,14 +178,12 @@ def write_all_alleles(prefix,str_file,support_reads_sorted,result_file):
                 fx.write(all_allele_results+"\n")
         
 
-def write_qc_matrix(prefix,fq_file,str_file,STR_result_str,result_file):
+def write_qc_matrix(prefix,fq_file,str_file,STR_results_list,result_file):
     fastq_info_stat=stat(fq_file)
     
-    STR_results_str_list = STR_result_str.split("\t")
-    genotypes_coverage,genotypes_seq, = STR_results_str_list[7],STR_results_str_list[8]
-    allele_origin = STR_results_str_list[5].split(", ")
-    genotype_allele = allele_origin if len(STR_result_str[6].split(", "))!=2 else STR_result_str[6].split(", ")
-    
+    genotypes_coverage,genotypes_seq, = STR_results_list[7],STR_results_list[8]
+    allele_origin = STR_results_list[5].split(", ")
+    genotype_allele = allele_origin if len(STR_results_list[6].split(", "))!=2 else STR_results_list[6].split(", ")
     if genotypes_seq =="NA":
         genotypes_info_stat=["NA"]*12
         genotypes_coverage_new,genotype_allele_new = ["NA"]*2,["NA"]*2
@@ -215,16 +213,16 @@ for line in bed:
     fq_file = os.path.join(args.fastq_dir,marker_name+"_reads_"+args.sample+"_merge.fastq")
 
     if count_lines(str_file)<=1:
-        STR_result_str = "\t".join(prefix +[pos,nomenclature]+["NA"]*4)
+        STR_results_list = prefix +[pos,nomenclature]+["NA"]*4
     else:
-        STR_result_str,support_reads_sorted = STR_parse(args.sample,args.sex,marker_name,str_file,official_name,pos,nomenclature)
+        STR_results_list,support_reads_sorted = STR_parse(args.sample,args.sex,marker_name,str_file,official_name,pos,nomenclature)
         ## write all alleles results
         write_all_alleles(prefix,str_file,support_reads_sorted,args.all_alleles)
     
     with open(args.genotypes, "a") as f:
-        f.write(re.sub("NA","-",STR_result_str)+"\n")
+        f.write(re.sub("NA","-","\t".join(STR_results_list))+"\n")
     ## write qc_matrix results
-    write_qc_matrix(prefix,fq_file,str_file,STR_result_str,args.qc_matrix)        
+    write_qc_matrix(prefix,fq_file,str_file,STR_results_list,args.qc_matrix)        
 
 
 
