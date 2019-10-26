@@ -152,15 +152,15 @@ def stat(fq_file):
 ### write header
 
 with open(args.genotypes, "w") as f1:
-    f1.write("Sample Name\tMarker name\tOfficial name\tPosition\tSTR sequence nomenclature\tAllele1/Allele2\tAllele adjust\tCoverage\tAllele sequence\n")
+    f1.write("Sample name\tMarker name\tOfficial name\tPosition\tSTR sequence sturucture\tAlleles (a1, a2)\tAlleles correction (a1, a2)\tSupporting reads (a1, a2)\tAllele sequences (a1, a2)\n")
 
 
 with open(args.multiple_alleles, "w") as f2:
-    f2.write("Sample name\tMarker name\tOfficial name\tAllele sequence\tAllele\tCoverage\n")
+    f2.write("Sample name\tMarker name\tOfficial name\tAllele sequences\tAllele\tSupporting reads\n")
 
 
 with open(args.qc_matrix, "w") as f3:
-        f3.write("Sample Name\tMarker name\tOfficial name\tTotal_bases\tNum_reads\tQ20\tQ30\tDis1_min_5\tDis1_max_5\tDis1_min_3\tDis1_max_3\tDis1_mean_5\tDis1_mean_3\tDis2_min_5\tDis2_max_5\tDis2_min_3\tDis2_max_3\tDis2_mean_5\tDis2_mean_3\tSupp_reads1\tSupp_reads2\tAllele1\tAllele2\n")
+        f3.write("Sample name\tMarker name\tOfficial name\tTotal_bases\tNum_reads\tQ20\tQ30\tDis1_min_5\tDis1_max_5\tDis1_min_3\tDis1_max_3\tDis1_mean_5\tDis1_mean_3\tDis2_min_5\tDis2_max_5\tDis2_min_3\tDis2_max_3\tDis2_mean_5\tDis2_mean_3\tSupp_reads1\tSupp_reads2\tAllele1\tAllele2\n")
     
 
 def write_all_alleles(prefix,str_file,support_reads_sorted,result_file):
