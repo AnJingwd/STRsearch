@@ -4,21 +4,33 @@ STRsearch is an end-to-end pipeline for targeted profiling of short tandem repea
 
 
 
+### Installation
+
+To obtain STRsearch, use:
+
+git clone https://github.com/AnJingwd/STRsearch.git
 
 
 
-
-### Quick and dirty start
-
-
+### PREREQUISITE
 
 ​      The following linux utilities are needed and the full path of  them on your  local machine  should be provided in conf.py file
 
-1.  bwa  (v1.7 or higher) 
-2.  samtools  (v1.7 or higher) 
-3.  bamToFastq (v2.17.0 or higher)
-4.  seqtk  (v1.2 or higher)
-5.  usearch (v11 or higher)
+1. bwa  (v1.7 or higher) 
+
+2. samtools  (v1.7 or higher) 
+
+3. bamToFastq (v2.17.0 or higher)
+
+4. seqtk  (v1.2 or higher)
+
+5. usearch (v11 or higher)
+
+   
+
+### BASIC USAGE
+
+
 
 ### Configuration file format:
 
@@ -68,11 +80,9 @@ Note some columns are not used. You can put any value in the non-required column
 
 
 
-### About STRsearch
+### REFERENCE
 
  The STRsearch publication is available here: 
-
-
 
 
 
