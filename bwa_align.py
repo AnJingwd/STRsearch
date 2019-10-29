@@ -91,9 +91,3 @@ bwaPE(args.sample,args.runID, args.lane, args.fq1,args.fq2,args.ref,sambam_dir,a
 
     
     
-
-
-
-
-
-
