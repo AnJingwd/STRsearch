@@ -3,11 +3,19 @@ STRsearch a new pipline for targeted profiling of short tandem repeat in massive
 
 
 
-**Quick and dirty start** 
+### Quick and dirty start
 
+​     The STRsearch pipline is implemented and packaged using Python, supporting both version Python2 and Python3.   
 
+ The following unix utilities are needed and the full path of  them on your  local machine  should be provided in conf.py file
 
-
+1.  java 
+2.  bwa 
+3.  picard.jar 
+4.  samtools 
+5.  bamToFastq 
+6.  seqtk 
+7.  usearch 
 
 ### Configuration file format:
 

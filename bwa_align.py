@@ -41,10 +41,8 @@ def conf_parse(conf_file):
 
 config = conf_parse(args.conf)
 mysamtools=eval(config["mysamtools"])
-myfastqc=eval(config["myfastqc"])
 mybwa=eval(config["mybwa"])
-mypicard=eval(config["mypicard"])
-myjava=eval(config["myjava"])
+
 
 ############ Create output subdirectories  ############
 
@@ -81,10 +79,10 @@ def bwaPE(sample,runID, lane, fq1,fq2,ref,output_dir,num_threads):
     Convert sam to bam and sort, using Picard.
     """
     bam_file = os.path.join(output_dir,sample+".bam")
-    COMMAND_SamToBam = "{0} -Xmx{1}g -jar {2} SortSam I={3} O={4} SORT_ORDER=coordinate"
-    COMMAND_sort = "{0} -Xmx{1}g -jar {2} BuildBamIndex I={3}"
-    os.system(COMMAND_SamToBam.format(myjava,num_threads,mypicard,sam_file,bam_file))
-    os.system(COMMAND_sort.format(myjava,num_threads,mypicard,bam_file))
+    COMMAND_sortTobam = "{0} sort {1}>{2}"
+    COMMAND_index = "{0} index {1}"
+    os.system(COMMAND_sortTobam.format(mysamtools,sam_file,bam_file))
+    os.system(COMMAND_index.format(mysamtools,bam_file))
     os.system("rm {0}".format(sam_file))
 
 check_file(args.fq1)
