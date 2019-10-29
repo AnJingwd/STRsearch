@@ -1,13 +1,18 @@
-# STRsearch
-STRsearch a new pipeline for targeted profiling of short tandem repeat in massively parallel sequencing data.
+### OVERVIEW
+
+STRsearch is an end-to-end pipeline for targeted profiling of short tandem repeats (STRs) in massively parallel sequencing data. It is implemented using Python, supporting both version Python2 and Python3. 
+
+
+
+
 
 
 
 ### Quick and dirty start
 
-​     The STRsearch pipeline is implemented and packaged using Python, supporting both version Python2 and Python3.   
 
- The following linux utilities are needed and the full path of  them on your  local machine  should be provided in conf.py file
+
+​      The following linux utilities are needed and the full path of  them on your  local machine  should be provided in conf.py file
 
 1.  bwa  (v1.7 or higher) 
 2.  samtools  (v1.7 or higher) 
@@ -49,13 +54,29 @@ Note some columns are not used. You can put any value in the non-required column
 
 
 
-### Description of flags
+### OPTIONS
 
- STRsearch supports the following flags: 
+| Option | Value Type | Default | Summary |
+| ------ | ---------- | ------- | ------- |
+|        |            |         |         |
+|        |            |         |         |
+|        |            |         |         |
+|        |            |         |         |
+|        |            |         |         |
+|        |            |         |         |
+|        |            |         |         |
 
 
 
 ### About STRsearch
 
  The STRsearch publication is available here: 
+
+
+
+
+
+### CONTACT
+
+Developer:  Dong Wang
 
