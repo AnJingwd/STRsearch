@@ -7,15 +7,13 @@ STRsearch a new pipline for targeted profiling of short tandem repeat in massive
 
 ​     The STRsearch pipline is implemented and packaged using Python, supporting both version Python2 and Python3.   
 
- The following unix utilities are needed and the full path of  them on your  local machine  should be provided in conf.py file
+ The following linux utilities are needed and the full path of  them on your  local machine  should be provided in conf.py file
 
-1.  java 
-2.  bwa 
-3.  picard.jar 
-4.  samtools 
-5.  bamToFastq 
-6.  seqtk 
-7.  usearch 
+1.  bwa 
+2.  samtools 
+3.  bamToFastq 
+4.  seqtk 
+5.  usearch 
 
 ### Configuration file format:
 
@@ -47,9 +45,7 @@ Note some columns are not used. You can put any value in the non-required column
 
  ### Algorithm description: 
 
-
-
-
+​         Briefly, STRsearch employs an iterative algorithm to obtain the longest continuous interval composed by all motifs of STR sequence structure without a priori assumptions on allele size. The actual STR region is determined by comparing the position of repeat patterns with the best matching location of flanking sequences in reads. Ultimately, allele size is calculated not only for repeat patterns, but also indels that are actually in the STR region.   
 
 
 
