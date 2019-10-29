@@ -1,19 +1,19 @@
 # STRsearch
-STRsearch a new pipline for targeted profiling of short tandem repeat in massively parallel sequencing data.
+STRsearch a new pipeline for targeted profiling of short tandem repeat in massively parallel sequencing data.
 
 
 
 ### Quick and dirty start
 
-​     The STRsearch pipline is implemented and packaged using Python, supporting both version Python2 and Python3.   
+​     The STRsearch pipeline is implemented and packaged using Python, supporting both version Python2 and Python3.   
 
  The following linux utilities are needed and the full path of  them on your  local machine  should be provided in conf.py file
 
-1.  bwa 
-2.  samtools 
-3.  bamToFastq 
-4.  seqtk 
-5.  usearch 
+1.  bwa  (v1.7 or higher) 
+2.  samtools  (v1.7 or higher) 
+3.  bamToFastq (v2.17.0 or higher)
+4.  seqtk  (v1.2 or higher)
+5.  usearch (v11 or higher)
 
 ### Configuration file format:
 
