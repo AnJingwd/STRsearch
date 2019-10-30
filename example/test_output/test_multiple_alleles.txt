@@ -1,0 +1,20 @@
+Sample	Marker	STR	Allele sequences	Allele	Supporting reads
+test	Marker3	D1GATA113	[GATA]7 	7	1356
+test	Marker3	D1GATA113	[GATA]12 	12	1235
+test	Marker3	D1GATA113	[GATA]11 	11	126
+test	Marker3	D1GATA113	[GATA]6 	6	66
+test	Marker58	D21S11	[TCTA]4 [TCTG]6 [TCTA]3 ta [TCTA]3 tca [TCTA]2 tccata [TCTA]11 	29	1487
+test	Marker58	D21S11	[TCTA]6 [TCTG]5 [TCTA]3 ta [TCTA]3 tca [TCTA]2 tccata [TCTA]11 	30	1270
+test	Marker58	D21S11	[TCTA]4 [TCTG]6 [TCTA]3 ta [TCTA]3 tca [TCTA]2 tccata [TCTA]10 	28	131
+test	Marker58	D21S11	[TCTA]6 [TCTG]5 [TCTA]3 ta [TCTA]3 tca [TCTA]2 tccata [TCTA]10 	29	111
+test	Marker94	DXS7423	[TGGA]11 aggacaga [TGGA]3 	14	1723
+test	Marker94	DXS7423	[TGGA]10 aggacaga [TGGA]3 	13	58
+test	Marker79	DYS612	[CCT]5 CTT [TCT]4 CCT [TCT]26 	37	1817
+test	Marker79	DYS612	[CCT]5 CTT [TCT]4 CCT [TCT]25 	36	467
+test	Marker79	DYS612	[CCT]5 CTT [TCT]4 CCT [TCT]24 	35	90
+test	Marker79	DYS612	[CCT]5 CTT [TCT]4 CCT [TCT]27 	38	86
+test	Marker85	DYS385a	[TTTC]14 	14	3097
+test	Marker85	DYS385a	[TTTC]13 	13	393
+test	Marker85	DYS385a	[TTTC]13 TTTT	14	102
+test	Marker85	DYS385a	[TTTC]14 TCTT	15	93
+test	Marker85	DYS385a	[TTTC]14 CTTT	15	46
