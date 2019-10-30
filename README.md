@@ -8,7 +8,9 @@ STRsearch is an end-to-end pipeline for targeted profiling of short tandem repea
 
 To obtain STRsearch, use:
 
+```Git
 git clone https://github.com/AnJingwd/STRsearch.git
+```
 
 
 
