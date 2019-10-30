@@ -9,22 +9,10 @@
 
 
 from __future__ import division
-import os,re,argparse
-import fastq
+import os,re
+from . import fastq
 import numpy as np
 
-parser = argparse.ArgumentParser(description='Parse STRsearch results')
-parser.add_argument('--sample', help='(must) assign the sample name',required=True)
-parser.add_argument('--sex', help='(must) assign the sex of sample',required=True)
-parser.add_argument('--fastq_dir', help='(must) The dir including fastq files produced by get_STR_fastq.py',required=True)
-parser.add_argument('--STRsearch_dir', help='(must) The dir containing original STR results produced by STR_search.py',required=True)
-parser.add_argument('--ref_bed', help='(must) The configuration file of STR',required=True)
-parser.add_argument('--genotypes', help='(must) The output for STR genotypes',required=True)
-parser.add_argument('--multiple_alleles', help='(must) The output for multiple alleles',required=True)
-parser.add_argument('--qc_matrix', help='(must) The output for quality control matrix',required=True)
-parser.add_argument('--reads_threshold', help='(option) The analytical threshold for number of reads(Default value:30)',type = int,default=30)
-parser.add_argument('--stutter_ratio', help='(option) assign the analytical threshold for stutter cut off(Default value:0.5)',default=0.5)
-args = parser.parse_args()
 
 def get_allele(input_file, full_seq):
     with open(input_file, "r") as f1:
@@ -72,7 +60,7 @@ def all_allele_sorted_dict(input_file):
     return support_reads_sorted
 
 
-def STR_parse(sample,sex,marker_name,input_file,marker,position,pattern):
+def STR_parse(sample,sex,pos,marker_name,input_file,marker,position,pattern,reads_threshold,stutter_ratio):
     support_reads_sorted = all_allele_sorted_dict(input_file)
     if len(support_reads_sorted)==1:
         full_seq_1 = full_seq_2 = support_reads_sorted[0][0]
@@ -84,16 +72,16 @@ def STR_parse(sample,sex,marker_name,input_file,marker,position,pattern):
         allele2= get_allele(input_file,full_seq_2)
         allele1_reads,allele2_reads =str(support_reads_sorted[0][1]),str(support_reads_sorted[1][1])
     merge = [str(i) + ", "+ str(j) for i, j in zip([allele1,allele1_reads,full_seq_1],[allele2,allele2_reads,full_seq_2])]
-    if int(allele1_reads)+int(allele2_reads)< int(args.reads_threshold):   ####  cov cut off
+    if int(allele1_reads)+int(allele2_reads)< int(reads_threshold):   ####  cov cut off
         allele_adjust_info = "allele reads too low"
-    elif int(allele2_reads)/int(allele1_reads)<float(args.stutter_ratio):    ## stutter cut off
+    elif int(allele2_reads)/int(allele1_reads)<float(stutter_ratio):    ## stutter cut off
         allele_adjust_info = allele1 + ", " + allele1
     else:
         allele_adjust_info = "NA"
     result_part1 = [sample,marker_name,marker,position,pattern]
     if sex =="male":
         if pos.split("-")[0]=="chrX" or pos.split("-")[0]=="chrY":
-            info = "NA" if int(allele1_reads)>args.reads_threshold else "allele reads too low"
+            info = "NA" if int(allele1_reads)>reads_threshold else "allele reads too low"
             result_part2 = [allele1,info,allele1_reads,full_seq_1]
         else:
             merge.insert(1,allele_adjust_info)
@@ -149,19 +137,7 @@ def stat(fq_file):
     return fastq_info_stat
 
 
-### write header
 
-with open(args.genotypes, "w") as f1:
-    f1.write("Sample name\tMarker name\tOfficial name\tPosition\tSTR sequence sturucture\tAlleles (a1, a2)\tAlleles correction (a1, a2)\tSupporting reads (a1, a2)\tAllele sequences (a1, a2)\n")
-
-
-with open(args.multiple_alleles, "w") as f2:
-    f2.write("Sample name\tMarker name\tOfficial name\tAllele sequences\tAllele\tSupporting reads\n")
-
-
-with open(args.qc_matrix, "w") as f3:
-        f3.write("Sample name\tMarker name\tOfficial name\tTotal_bases\tNum_reads\tQ20\tQ30\tDis1_min_5\tDis1_max_5\tDis1_min_3\tDis1_max_3\tDis1_mean_5\tDis1_mean_3\tDis2_min_5\tDis2_max_5\tDis2_min_3\tDis2_max_3\tDis2_mean_5\tDis2_mean_3\tSupp_reads1\tSupp_reads2\tAllele1\tAllele2\n")
-    
 
 def write_all_alleles(prefix,str_file,support_reads_sorted,result_file):
     with open(result_file, "a") as fx:
@@ -200,31 +176,41 @@ def write_qc_matrix(prefix,fq_file,str_file,STR_results_list,result_file):
         ft.write("\t".join(qc_matrix_list)+"\n")
     
 
+def main(sample,sex,fastq_dir,STRsearch_dir,ref_bed,genotypes,multiple_alleles,qc_matrix,reads_threshold,stutter_ratio):
 
-bed = open(args.ref_bed,"r")
-next(bed)
-for line in bed:
-    content_list = line.strip().split("\t")
-    marker_name,official_name = content_list[5],content_list[6]
-    chr,pos,nomenclature = content_list[0],content_list[0] +"-hg19 "+content_list[1] +"-"+content_list[2],content_list[7]
-    
-    prefix = [args.sample,marker_name,official_name]
-    str_file = os.path.join(args.STRsearch_dir,marker_name+"_results_"+args.sample+".txt")
-    fq_file = os.path.join(args.fastq_dir,marker_name+"_reads_"+args.sample+"_merge.fastq")
+    ### write header
+    with open(genotypes, "w") as f1:
+        f1.write("Sample\tMarker\tSTR\tPosition\tSTR sequence sturucture\tAlleles (a1, a2)\tAlleles correction (a1, a2)\tSupporting reads (a1, a2)\tAllele sequences (a1, a2)\n")
+    with open(multiple_alleles, "w") as f2:
+        f2.write("Sample\tMarker\tSTR\tAllele sequences\tAllele\tSupporting reads\n")
+    with open(qc_matrix, "w") as f3:
+            f3.write("Sample\tMarker\tSTR\tTotal_bases\tNum_reads\tQ20\tQ30\tDis1_min_5\tDis1_max_5\tDis1_min_3\tDis1_max_3\tDis1_mean_5\tDis1_mean_3\tDis2_min_5\tDis2_max_5\tDis2_min_3\tDis2_max_3\tDis2_mean_5\tDis2_mean_3\tSupp_reads1\tSupp_reads2\tAllele1\tAllele2\n")
 
-    if count_lines(str_file)<=1:
-        STR_results_list = prefix +[pos,nomenclature]+["NA"]*4
-    else:
-        STR_results_list,support_reads_sorted = STR_parse(args.sample,args.sex,marker_name,str_file,official_name,pos,nomenclature)
-        ## write all alleles results
-        write_all_alleles(prefix,str_file,support_reads_sorted,args.multiple_alleles)
-    
-    with open(args.genotypes, "a") as f:
-        f.write(re.sub("NA","-","\t".join(STR_results_list))+"\n")
-    ## write qc_matrix results
-    write_qc_matrix(prefix,fq_file,str_file,STR_results_list,args.qc_matrix)        
+    bed = open(ref_bed,"r")
+    next(bed)
+    for line in bed:
+        content_list = line.strip().split("\t")
+        marker_name,official_name = content_list[5],content_list[6]
+        chr,pos,nomenclature = content_list[0],content_list[0] +": "+content_list[1] +"-"+content_list[2],content_list[7]
+        
+        prefix = [sample,marker_name,official_name]
+        str_file = os.path.join(STRsearch_dir,marker_name+"_results_"+sample+".txt")
+        fq_file = os.path.join(fastq_dir,marker_name+"_reads_"+sample+"_merge.fastq")
+
+        if count_lines(str_file)<=1:
+            STR_results_list = prefix +[pos,nomenclature]+["NA"]*4
+        else:
+            STR_results_list,support_reads_sorted = STR_parse(sample,sex,pos,marker_name,str_file,official_name,pos,nomenclature,reads_threshold,stutter_ratio)
+            ## write all alleles results
+            write_all_alleles(prefix,str_file,support_reads_sorted,multiple_alleles)
+        
+        with open(genotypes, "a") as f:
+            f.write(re.sub("NA","-","\t".join(STR_results_list))+"\n")
+        ## write qc_matrix results
+        write_qc_matrix(prefix,fq_file,str_file,STR_results_list,qc_matrix)        
+
+    print("STR parse finished !")
 
 
-
-
-print("STR parse finished !")
+if __name__=='__main__':
+    sys.exit(main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6],sys.argv[7], sys.argv[8],sys.argv[9], sys.argv[10]))

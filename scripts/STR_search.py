@@ -8,21 +8,10 @@
 # @github    ：https://github.com/AnJingwd/STRsearch
 
 from __future__ import division
-import os,re,argparse
+import os,re
 import numpy as np
 from functools import reduce
 from multiprocessing import Pool as Pool
-
-parser = argparse.ArgumentParser(description='Search STR pattern from fastq file')
-parser.add_argument('--working_dir', help='(must) The working path for STR genotyping',required=True)
-parser.add_argument('--sample', help='(must) The sample name',required=True)
-parser.add_argument('--sex', help='(must) The sex of sample (male or female)',required=True)
-parser.add_argument('--fastq_dir', help='(must) The dir including fastq files produced by get_STR_fastq.py',required=True)
-parser.add_argument('--ref_bed', help='(must) The configuration file of STR',required=True)
-parser.add_argument('--reads_threshold', help='(option) The analytical threshold for number of reads(Default value:30)',type = int,default=30)
-parser.add_argument('--num_processors', help='(option) The number of multiprocess (Default value:4)',type = int,default=4)
-args = parser.parse_args()
-
 
 
 def STR_nomenclature_trans(period,STR_Repeat_Motif):
@@ -264,7 +253,7 @@ def STR_search(STR_Repeat_Motif,period,seq,flank_seq_left,flank_seq_right):
         else:
             return (STR_result_pat_full,allele,rep_num,flank_mismatchs,distances)
 
-def main(args_list):
+def STR_search_one_locus(args_list):
     marker_name,STR_Repeat_Motif,period,STR_fastq_file,result_file,flank_seq_left,flank_seq_right= args_list
     results = open(result_file,"w")
     results.write("STR_sequence_structure\tAllele\tFlank_mismatchs(5',3')\tDistance_to_reads_ends(5',3')\n")
@@ -303,43 +292,47 @@ def count_reads(fq_file):
 
 ###################  STR genotype for locus listed in bed file one by one  #####################
 
-## create dir for original results of STR genotyping
-STR_results_dir=os.path.join(args.working_dir,"STRsearch")
-if not os.path.exists(STR_results_dir):
-    os.makedirs(STR_results_dir)
+def main(working_path,sample,sex,fastq_dir,ref_bed,reads_threshold,num_processors):
+    ## create STR genotyping path
+    STR_results_dir=os.path.join(working_path,"STRsearch")
+    if not os.path.exists(STR_results_dir):
+        os.makedirs(STR_results_dir)
 
-
-info_list = []
-bed = open(args.ref_bed,"r")
-next(bed)
-N = 0
-for line in bed:
-    line = line.strip()
-    content_list = line.split("\t")
-    chr = content_list[0]
-    period = int(content_list[3])
-    marker_name = content_list[5]
-    STR_Repeat_Motif = content_list[7]
-    stand = content_list[-3]
-    flank_seq_left,flank_seq_right = content_list[-2],content_list[-1]
-    STR_fastq_merge_file = os.path.join(args.fastq_dir, marker_name +"_reads_"+args.sample+"_merge.fastq")
-    result_file = os.path.join(STR_results_dir,marker_name+"_results_{}.txt".format(args.sample))
-    if count_reads(STR_fastq_merge_file)<= int(args.reads_threshold): # if reads < 30 in fastq, the STR locus won't be genotyped , but create empty file
-        os.system("touch {0}".format(result_file))
-        print("{} has been decoded completely!".format(marker_name))
-    else:
-        if args.sex =="female" and chr == "chrY":
+    info_list = []
+    bed = open(ref_bed,"r")
+    next(bed)
+    N = 0
+    for line in bed:
+        line = line.strip()
+        content_list = line.split("\t")
+        chr = content_list[0]
+        period = int(content_list[3])
+        marker_name = content_list[5]
+        STR_Repeat_Motif = content_list[7]
+        stand = content_list[-3]
+        flank_seq_left,flank_seq_right = content_list[-2],content_list[-1]
+        STR_fastq_merge_file = os.path.join(fastq_dir, marker_name +"_reads_"+sample+"_merge.fastq")
+        result_file = os.path.join(STR_results_dir,marker_name+"_results_{}.txt".format(sample))
+        if count_reads(STR_fastq_merge_file)<= int(reads_threshold): # if reads < 30 in fastq, the STR locus won't be genotyped , but create empty file
             os.system("touch {0}".format(result_file))
             print("{} has been decoded completely!".format(marker_name))
         else:
-            info_list.append([marker_name,STR_Repeat_Motif,period,STR_fastq_merge_file,result_file,flank_seq_left,flank_seq_right])
-    N+=1
-bed.close()
+            if sex =="female" and chr == "chrY":
+                os.system("touch {0}".format(result_file))
+                print("{} has been decoded completely!".format(marker_name))
+            else:
+                info_list.append([marker_name,STR_Repeat_Motif,period,STR_fastq_merge_file,result_file,flank_seq_left,flank_seq_right])
+        N+=1
+    bed.close()
 
-pool = Pool(args.num_processors)
-pool.imap(main, info_list)
-pool.close()
-pool.join()
-print('Finished searching for total {} STR locus'.format(N))
+    pool = Pool(num_processors)
+    pool.imap(STR_search_one_locus, info_list)
+    pool.close()
+    pool.join()
+    print('Finished searching for total {} STR locus'.format(N))
+
+
+if __name__=='__main__':
+    sys.exit(main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6],sys.argv[7]))
 
 
