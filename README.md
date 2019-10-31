@@ -19,16 +19,18 @@ git clone https://github.com/AnJingwd/STRsearch.git
 ​      The following linux utilities are needed and the full path of  them on your  local machine  should be provided in conf.py file
 
 1. bwa  (v1.7 or higher) 
-
 2. samtools  (v1.7 or higher) 
-
 3. bamToFastq (v2.17.0 or higher)
-
 4. seqtk  (v1.2 or higher)
+5. usearch (v11 or higher)  [Download](https://www.drive5.com/usearch/download.html)
 
-5. usearch (v11 or higher)
+Additionally, the following Python modules are required.
 
-   
+1. numpy
+2. argparse
+3. pathlib
+
+
 
 ### BASIC USAGE
 
