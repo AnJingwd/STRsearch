@@ -1,4 +1,4 @@
-### OVERVIEW
+### Overview
 
  &emsp;  &emsp; STRsearch is an end-to-end pipeline for targeted profiling of short tandem repeats (STRs) in massively parallel sequencing data. It is implemented using Python, supporting both version Python2 and Python3. 
 
@@ -66,8 +66,6 @@ Note some columns are not used. You can put any value in the non-required column
 
 
 
- 
-
 ### Inputs
 
 FASTQ file or BAM-file from singe-end or paird-end sequencing platforms
@@ -133,9 +131,7 @@ from_bam \
 
 
 
-
-
-### OPTIONS
+### Options
 
 **Default parameters**
 
@@ -184,13 +180,13 @@ from_bam \
 
 
 
-### REFERENCE
+### Reference
 
  The STRsearch publication is available here: 
 
 
 
-### CONTACT
+### Contact
 
 Developer:  Dong Wang
 
