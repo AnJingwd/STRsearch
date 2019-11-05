@@ -1,6 +1,10 @@
 ### OVERVIEW
 
-STRsearch is an end-to-end pipeline for targeted profiling of short tandem repeats (STRs) in massively parallel sequencing data. It is implemented using Python, supporting both version Python2 and Python3. 
+ &emsp;  &emsp; STRsearch is an end-to-end pipeline for targeted profiling of short tandem repeats (STRs) in massively parallel sequencing data. It is implemented using Python, supporting both version Python2 and Python3. 
+
+ ### Algorithm description: 
+
+ &emsp;  &emsp; Briefly, STRsearch employs an iterative algorithm to obtain the longest continuous interval composed by all motifs of STR sequence structure without a priori assumptions on allele size. The actual STR region is determined by comparing the position of repeat patterns with the best matching location of flanking sequences in reads. Ultimately, allele size is calculated not only for repeat patterns, but also indels that are actually in the STR region.  
 
 
 
@@ -16,7 +20,7 @@ git clone https://github.com/AnJingwd/STRsearch.git
 
 ### PREREQUISITE
 
-​      The following linux utilities are needed and the full path of  them on your  local machine  should be provided in conf.py file
+ &emsp;  &emsp; The following linux utilities are needed and the full path of  them on your  local machine  should be provided in conf.py file
 
 1. bwa  (v1.7 or higher) 
 2. samtools  (v1.7 or higher) 
@@ -32,13 +36,9 @@ Additionally, the following Python modules are required.
 
 
 
-### BASIC USAGE
-
-
-
 ### Configuration file format:
 
-​      The first step for  STR analysis with STRsearch is to create a configuration file with your custom set of STR loci. One way to do this is by referring to the most up-to-date revised forensic STR sequence guide  and a worksheet can be downloaded from [link](https://strider.online/bundles/strbaseclient/downloads/Forensic_STR_Sequence_Structure_Guide_v5.xlsx). You will need to make a configuration file with the following columns present: 
+ &emsp;  &emsp; The first step for  STR analysis with STRsearch is to create a configuration file with your custom set of STR loci. One way to do this is by referring to the most up-to-date revised forensic STR sequence guide  and a worksheet can be downloaded from [link](https://strider.online/bundles/strbaseclient/downloads/Forensic_STR_Sequence_Structure_Guide_v5.xlsx). You will need to make a configuration file with the following columns present: 
 
 | Chr   | Start     | End       | Period | Reference allele | Marker  | STR       | STR sequence structure                                       | Stand | 5' Flanking  sequence | 3' Flanking  sequence |
 | ----- | --------- | --------- | ------ | ---------------- | ------- | --------- | ------------------------------------------------------------ | ----- | --------------------- | --------------------- |
@@ -60,13 +60,75 @@ Additionally, the following Python modules are required.
 10. Column 10 : 5' flanking sequence of repeat region  (must)
 11. Column 11 : 3' flanking sequence of repeat region  (must)
 
+
+
 Note some columns are not used. You can put any value in the non-required columns, just make sure there are at least 11 columns with the required information listed above. Importanly, flanking sequences are necessarily adjacent to STR repeat region.  
 
 
 
- ### Algorithm description: 
+ 
 
-​         Briefly, STRsearch employs an iterative algorithm to obtain the longest continuous interval composed by all motifs of STR sequence structure without a priori assumptions on allele size. The actual STR region is determined by comparing the position of repeat patterns with the best matching location of flanking sequences in reads. Ultimately, allele size is calculated not only for repeat patterns, but also indels that are actually in the STR region.   
+### Inputs
+
+
+
+
+
+### Output
+
+
+
+### Usage examples
+
+
+
+1. run with  default parameters 
+
+```shell
+python3 pipeline.py from_fastq \
+--working_path test_results/ \
+--sample test \
+--fq1 test_data/test_R1.fastq \
+--fq2 test_data/test_R2.fastq \
+--runID 1 \
+--lane 1 \
+--ref ucsc.hg19.fasta
+```
+
+```shell
+python3 pipeline.py from_bam \
+--working_path test_results \
+--sample test \
+--sex male \
+--bam test.bam \
+--ref_bed ref_test.bed \
+--genotypes test_genotypes.txt \
+--multiple_alleles test_multiple_alleles.txt \
+--qc_matrix test_qc_matrix.txt
+```
+
+2. run with self-defined parameters 
+
+```shell
+python3 pipeline.py \
+--type \
+--assemble_pairs \
+--reads_threshold \
+--stutter_ratio \
+--num_threads \
+--num_processors \
+from_bam \
+--working_path test_results \
+--sample test \
+--sex male \
+--bam test.bam \
+--ref_bed test.bed \
+--genotypes test_genotypes.txt \
+--multiple_alleles test_multiple_alleles.txt \
+--qc_matrix test_qc_matrix.txt
+```
+
+
 
 
 
@@ -76,7 +138,7 @@ Note some columns are not used. You can put any value in the non-required column
 
 | Option            | Value Type | Default | Summary                                          |
 | ----------------- | ---------- | ------- | ------------------------------------------------ |
-| --help            |            |         |                                                  |
+| --help            |            | false   | display the help message                         |
 | --type            | str        | paired  | (option) The sequencing type                     |
 | --assemble_pairs  | bool       | False   | (option) if True, paired-end reads are assembled |
 | --reads_threshold | int        | 30      | (option) The analytical threshold for reads      |
@@ -90,15 +152,15 @@ Note some columns are not used. You can put any value in the non-required column
 
 | Option             | Value Type | Default | Summary                                      |
 | ------------------ | ---------- | ------- | -------------------------------------------- |
-| --help             |            |         |                                              |
-| --working_path     | str        |         | (must) The working path                      |
-| --sample           | str        |         | (must) The sample name                       |
-| --sex              | str        |         | (must) The sample sex                        |
-| --bam              | str        |         | (must) The input BAM-file                    |
-| --ref_bed          | str        |         | (must) The configuration file of STRs        |
-| --genotypes        | str        |         | (must) The output for STR genotypes          |
-| --multiple_alleles | str        |         | (must) The output for multiple alleles       |
-| --qc_matrix        | str        |         | (must) The output for quality control matrix |
+| --help             |            | false   | display the help message                     |
+| --working_path     | str        | null    | (must) The working path                      |
+| --sample           | str        | null    | (must) The sample name                       |
+| --sex              | str        | null    | (must) The sample sex                        |
+| --bam              | str        | null    | (must) The input BAM-file                    |
+| --ref_bed          | str        | null    | (must) The configuration file of STRs        |
+| --genotypes        | str        | null    | (must) The output for STR genotypes          |
+| --multiple_alleles | str        | null    | (must) The output for multiple alleles       |
+| --qc_matrix        | str        | null    | (must) The output for quality control matrix |
 
 
 
@@ -108,14 +170,14 @@ Note some columns are not used. You can put any value in the non-required column
 
 | Option         | Value Type | Default | Summary                                                      |
 | -------------- | ---------- | ------- | ------------------------------------------------------------ |
-| --help         |            |         |                                                              |
-| --working_path | str        |         | (must) The working path                                      |
-| --sample       | str        |         | (must) The sample name                                       |
-| --fq1          | str        |         | (must) The input R1_fastq.gz file                            |
-| --fq2          | str        |         | (must) The input R2_fastq.gz file                            |
-| --runID        | str        |         | (must) The runID information                                 |
-| --lane         | str        |         | (must) The lane information                                  |
-| --ref          | str        |         | (must) The reference genome fasta and index file in the same path |
+| --help         |            | false   | display the help message                                     |
+| --working_path | str        | null    | (must) The working path                                      |
+| --sample       | str        | null    | (must) The sample name                                       |
+| --fq1          | str        | null    | (must) The input R1_fastq.gz file                            |
+| --fq2          | str        | null    | (must) The input R2_fastq.gz file                            |
+| --runID        | str        | null    | (must) The runID information                                 |
+| --lane         | str        | null    | (must) The lane information                                  |
+| --ref          | str        | null    | (must) The reference genome fasta and index file in the same path |
 
 
 

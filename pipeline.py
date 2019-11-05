@@ -42,20 +42,13 @@ parser_a.add_argument('--qc_matrix', help='(must) The output for quality control
 parser_b = subparsers.add_parser('from_fastq',help='map reads to create BAM-file firstly')
 parser_b.add_argument('--working_path', type=str,help='(must) The working path')
 parser_b.add_argument('--sample',type=str,help='(must) The sample name')
-parser_b.add_argument('--fq1',type=str, help='(must) The input R1_fastq.gz file')
-parser_b.add_argument('--fq2',type=str, help='(must) The input R2_fastq.gz file')
+parser_b.add_argument('--fq1',type=str, help='(must) The input R1_fastq.gz or R1_fastq file')
+parser_b.add_argument('--fq2',type=str, help='(must) The input R2_fastq.gz or R2_fastq file')
 parser_b.add_argument('--runID',type=str, help='(must) The runID information')
 parser_b.add_argument('--lane',type=str, help='(must) The lane information')
 parser_b.add_argument('--ref',type=str, help='(must) The reference genome fasta and index file in the same path')
 args = parser.parse_args()
 
-
-if args.command == 'from_bam':
-    print("from_bam")
-elif args.command == 'from_fastq':
-    print("from_fastq")
-else:
-    print("111")
 
 
 if args.command == 'from_bam':
@@ -64,6 +57,11 @@ elif args.command == 'from_fastq':
     bwa_align(args.sample,args.fq1,args.fq2,args.runID, args.lane,args.ref,args.working_path,args.num_threads)
     bam_file=os.path.join(args.working_path,"alignments",args.sample,".bam")
     sys.exit()
+
+if args.type=="single" and args.assemble_pairs ==True:
+    print("The option assemble_pairs can be setted to be 'True' only for paired-end sequencing data")
+    sys.exit()
+
 get_STR_fastq(args.sample,bam_file,args.working_path,args.ref_bed,args.type,args.assemble_pairs,args.num_processors)
 
 fastq_dir = os.path.join(args.working_path,"STRfq")

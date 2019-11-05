@@ -50,7 +50,7 @@ def get_STR_fq_from_bam(args_list):
     merge_fq_forward =os.path.join(result_dir,marker_name+"_reads_"+sample+"_merge_forward.fastq") 
     COMMAND_samtools = "{0} view -b1 {1} {2}>{3}"
     COMMAND_sort = "{0} sort -n {1}>{2}"
-    COMMAND_bamToFastq = "{0} -i {1} -fq {2} -fq2 {3}"
+    COMMAND_bamToFastq = "{0} -i {1} -fq {2} -fq2 {3}>/dev/null 2>&1"
     COMMAND_reverse = "{0} seq -r {1}>{2}"
     COMMAND_merge = "{0} -fastq_mergepairs {1} -reverse {2} -fastqout {3}"
     
