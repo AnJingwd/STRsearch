@@ -266,11 +266,9 @@ docker run -v LOCAL_PATH/app/:/app/ -w /app/ -it anjing123/strsearch:latest from
 --qc_matrix /app/test_results/test_qc_matrix.txt
 ```
 
-
-
-
-
-
+```
+docker run -v LOCAL_PATH/app/:/app/ -w /app/ -it anjing123/strsearch:latest from_bam --working_path /app/test_results/ --sample test --sex male --bam /app/test_results/alignments/test.bam --ref_bed /app/ref_test.bed --genotypes /app/test_results/test_genotypes.txt --multiple_alleles /app/test_results/test_multiple_alleles.txt --qc_matrix /app/test_results/test_qc_matrix.txt
+```
 
 
 
