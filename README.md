@@ -70,11 +70,15 @@ Note some columns are not used. You can put any value in the non-required column
 
 ### Inputs
 
-
-
-
+FASTQ file or BAM-file from singe-end or paird-end sequencing platforms
 
 ### Output
+
+- genotypes.txt: genotypes on each targeted locus
+
+- multiple_alleles.txt: all alleles identified on each targeted locus
+
+- qc_matrix.txt:  a quality control matrix including several sequence properties (total bases, sequencing quality score, number of allocated reads, distance distribution of STR repeat sequence to end of reads, allele read depth)  
 
 
 
