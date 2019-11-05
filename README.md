@@ -88,9 +88,9 @@ FASTQ file or BAM-file from singe-end or paird-end sequencing platforms
 
 ### Usage examples
 
+**1. run with  default parameters**
 
-
-1. run with  default parameters 
+for paired-end sequencing
 
 ```shell
 python3 pipeline.py from_fastq \
@@ -98,10 +98,10 @@ python3 pipeline.py from_fastq \
 --sample test \
 --fq1 example/test_data/test_R1.fastq \
 --fq2 example/test_data/test_R2.fastq \
---runID 1 \
---lane 1 \
 --ref ucsc.hg19.fasta
 ```
+
+
 
 ```shell
 python3 pipeline.py from_bam \
@@ -115,7 +115,39 @@ python3 pipeline.py from_bam \
 --qc_matrix example/test_results/test_qc_matrix.txt
 ```
 
-2. run with self-defined parameters 
+
+
+for single-end sequencing
+
+```shell
+python3 pipeline.py  \
+--type single \
+from_fastq \
+--working_path example/test_results/ \
+--sample test \
+--fq1 example/test_data/test_R1.fastq \
+--ref ucsc.hg19.fasta
+```
+
+
+
+```shell
+python3 pipeline.py \
+--type single \
+from_bam \
+--working_path example/test_results \
+--sample test \
+--sex male \
+--bam example/test_results/alignments/test.bam \
+--ref_bed example/ref_test.bed \
+--genotypes example/test_results/test_genotypes.txt \
+--multiple_alleles example/test_results/test_multiple_alleles.txt \
+--qc_matrix example/test_results/test_qc_matrix.txt
+```
+
+
+
+**2. run with self-defined parameters**
 
 ```shell
 python3 pipeline.py \
@@ -171,18 +203,49 @@ from_bam \
 
 2. from_fastq
 
-   
 
 | Option         | Value Type | Default | Summary                                                      |
 | -------------- | ---------- | ------- | ------------------------------------------------------------ |
 | --help         |            | false   | display the help message                                     |
 | --working_path | str        | null    | (must) The working path                                      |
 | --sample       | str        | null    | (must) The sample name                                       |
-| --fq1          | str        | null    | (must) The input R1_fastq.gz file                            |
-| --fq2          | str        | null    | (must) The input R2_fastq.gz file                            |
-| --runID        | str        | null    | (must) The runID information                                 |
-| --lane         | str        | null    | (must) The lane information                                  |
+| --fq1          | str        | null    | (must) The in1.fq                                            |
+| --fq2          | str        | null    | (option) The in2.fq for paired-end sequencing                |
 | --ref          | str        | null    | (must) The reference genome fasta and index file in the same path |
+
+
+
+### Run with Docker
+
+To obtain STRsearch Docker image, use:
+
+```GO
+docker pull anjing123/strsearch:v1
+```
+
+
+
+```GO
+docker run anjing123/strsearch:v1 \
+-v /root/STRsearch/test:$PWD \
+-w $PWD \
+--entrypoint python pipeline.py from_fastq -h
+```
+
+
+
+```GO
+docker run anjing123/strsearch:v1 \
+-v /root/STRsearch/test:$PWD \
+-w $PWD \
+--entrypoint python pipeline.py from_bam -h
+```
+
+
+
+
+
+
 
 
 

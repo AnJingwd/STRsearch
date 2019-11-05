@@ -28,28 +28,29 @@ def conf_parse(conf_file):
         return conf_dict
 
 
+
 def check_file(file):
-    my_file = Path(file)
-    try:
-        fq_file = my_file.resolve()
-    except FileNotFoundError:
-            print("fastq.gz file doesn't exist!!")    
+    file_name = Path(file)
+    if not file_name.exists():
+        print("{0} doesn't exist!".format(file_name.name))
+        sys.exit()
+    else:
+        if file_name.suffix not in [".fastq",".fq",".fastq.gz",".fq.gz"]:
+            print("FASTQ file isn't correct!")
+            sys.exit()
     
-def make_metadata_string(metadata):
-    return r'"@RG\tID:%s\tSM:%s\tPL:%s"' % (metadata['ID'], metadata['SM'], metadata['PL'])
 
-
-def bwaPE(sample,fq1,fq2,runID, lane,ref,alignments_path,mysamtools,mybwa,num_threads):
-    """
-    Aligns two paired-end fastq files to a reference genome to produce a sam file.
-    """
-    readgroup_metadata = { 'PL': 'ILLUMINA',
-                       'SM': sample,
-                       'ID': "%s_%s_Lane%d" % (sample, runID, int(lane)) }
-    metadata_str = make_metadata_string(readgroup_metadata)
+def bwa_mapping(sample,type,fq1,ref,alignments_path,mysamtools,mybwa,num_threads,fq2=None):
+    '''
+    Aligns fastq files to a reference genome to produce a sam file.
+    '''
     sam_file = os.path.join(alignments_path,sample+".sam")
-    COMMAND_BWA = "{0} mem -t ${1} -M -R {2} {3} {4} {5}>{6}"
-    os.system(COMMAND_BWA.format(mybwa,num_threads,metadata_str,ref,fq1,fq2,sam_file))
+    if type =="single":
+        COMMAND_BWA = "{0} mem -t {1} {2} {3}>{4}"
+        os.system(COMMAND_BWA.format(mybwa,num_threads,ref,fq1,sam_file))
+    else:
+        COMMAND_BWA = "{0} mem -t {1} {2} {3} {4}>{5}"
+        os.system(COMMAND_BWA.format(mybwa,num_threads,ref,fq1,fq2,sam_file))
     
     """
     Convert sam to bam and sort, using Picard.
@@ -61,7 +62,7 @@ def bwaPE(sample,fq1,fq2,runID, lane,ref,alignments_path,mysamtools,mybwa,num_th
     os.system(COMMAND_index.format(mysamtools,bam_file))
     os.system("rm {0}".format(sam_file))
 
-def main(sample,fq1,fq2,runID, lane,ref,working_path,num_threads):
+def main(sample,type,fq1,ref,working_path,num_threads,fq2):
     conf_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     config = conf_parse(os.path.join(conf_path,"conf.py"))
     mysamtools =eval(config["mysamtools"])
@@ -71,12 +72,13 @@ def main(sample,fq1,fq2,runID, lane,ref,working_path,num_threads):
     if not os.path.exists(alignments_path):
         os.makedirs(alignments_path)
     check_file(fq1)
-    check_file(fq2)
-    bwaPE(sample,fq1,fq2,runID, lane,ref,alignments_path,mysamtools,mybwa,num_threads)
+    if fq2:
+        check_file(fq2)
+    bwa_mapping(sample,type,fq1,ref,alignments_path,mysamtools,mybwa,num_threads,fq2)
 
 
 if __name__=='__main__':
-    sys.exit(main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6],sys.argv[7], sys.argv[8]))
+    sys.exit(main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6],sys.argv[7]))
 
     
     
