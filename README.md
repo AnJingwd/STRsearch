@@ -225,20 +225,45 @@ docker pull anjing123/strsearch:v1
 
 
 
-```GO
-docker run anjing123/strsearch:v1 \
--v /root/STRsearch/test:$PWD \
--w $PWD \
---entrypoint python pipeline.py from_fastq -h
+```
+app/
+├── ref
+│   ├── ucsc.hg19.fasta
+│   ├── ucsc.hg19.fasta.amb
+│   ├── ucsc.hg19.fasta.ann
+│   ├── ucsc.hg19.fasta.bwt
+│   ├── ucsc.hg19.fasta.pac
+│   └── ucsc.hg19.fasta.sa
+├── ref_test.bed
+└── test_data
+    ├── test.bam
+    ├── test_R1.fastq
+    └── test_R2.fastq
 ```
 
 
 
-```GO
-docker run anjing123/strsearch:v1 \
--v /root/STRsearch/test:$PWD \
--w $PWD \
---entrypoint python pipeline.py from_bam -h
+```shell
+docker run -v LOCAL PATH/app/:/app/ -w /app/ -it anjing123/strsearch:v2 from_fastq \
+--working_path /app/test_results/ \
+--sample test \
+--fq1 /app/test_data/test_R1.fastq \
+--fq2 /app/test_data/test_R2.fastq \
+--ref /app/ref/ucsc.hg19.fasta
+```
+
+
+
+```shell
+docker run -v LOCAL PATH/app/:/app/ -w /app/ -it anjing123/strsearch:v2 from_bam \
+--working_path /app/test_results/ \
+--sample test \
+--sex male \
+--bam /app/test_results/alignments/test.bam \
+--ref_bed /app/ref_test.bed \
+--genotypes /app/test_results/test_genotypes.txt \
+--multiple_alleles /app/test_results/test_multiple_alleles.txt \
+--qc_matrix /app/test_results/test_qc_matrix.txt
 ```
 
 
