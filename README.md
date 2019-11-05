@@ -18,7 +18,7 @@ git clone https://github.com/AnJingwd/STRsearch.git
 
 
 
-### PREREQUISITE
+### Prerequisite
 
  &emsp;  &emsp; The following linux utilities are needed and the full path of  them on your  local machine  should be provided in conf.py file
 
