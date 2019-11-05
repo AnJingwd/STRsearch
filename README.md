@@ -220,7 +220,7 @@ from_bam \
 To obtain STRsearch Docker image, use:
 
 ```GO
-docker pull anjing123/strsearch:v1
+docker pull anjing123/strsearch:latest
 ```
 
 
@@ -244,7 +244,7 @@ LOCAL_PATH/app/
 
 
 ```shell
-docker run -v LOCAL_PATH/app/:/app/ -w /app/ -it anjing123/strsearch:v2 from_fastq \
+docker run -v LOCAL_PATH/app/:/app/ -w /app/ -it anjing123/strsearch:latest from_fastq \
 --working_path /app/test_results/ \
 --sample test \
 --fq1 /app/test_data/test_R1.fastq \
@@ -255,7 +255,7 @@ docker run -v LOCAL_PATH/app/:/app/ -w /app/ -it anjing123/strsearch:v2 from_fas
 
 
 ```shell
-docker run -v LOCAL_PATH/app/:/app/ -w /app/ -it anjing123/strsearch:v2 from_bam \
+docker run -v LOCAL_PATH/app/:/app/ -w /app/ -it anjing123/strsearch:latest from_bam \
 --working_path /app/test_results/ \
 --sample test \
 --sex male \
