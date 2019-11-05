@@ -16,6 +16,12 @@ To obtain STRsearch, use:
 git clone https://github.com/AnJingwd/STRsearch.git
 ```
 
+or
+
+```shell
+wget https://github.com/AnJingwd/STRsearch/archive/master.zip
+```
+
 
 
 ### Prerequisite
