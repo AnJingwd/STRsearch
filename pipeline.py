@@ -59,7 +59,7 @@ elif args.command == 'from_fastq':
     sys.exit()
 
 if args.type=="single" and args.assemble_pairs ==True:
-    print("The option assemble_pairs can be setted to be 'True' only for paired-end sequencing data")
+    print("The option assemble_pairs can be setted to be 'True' only for paired-end sequencing data!!!")
     sys.exit()
 
 get_STR_fastq(args.sample,bam_file,args.working_path,args.ref_bed,args.type,args.assemble_pairs,args.num_processors)

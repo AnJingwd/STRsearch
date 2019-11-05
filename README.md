@@ -86,10 +86,10 @@ Note some columns are not used. You can put any value in the non-required column
 
 ```shell
 python3 pipeline.py from_fastq \
---working_path test_results/ \
+--working_path example/test_results/ \
 --sample test \
---fq1 test_data/test_R1.fastq \
---fq2 test_data/test_R2.fastq \
+--fq1 example/test_data/test_R1.fastq \
+--fq2 example/test_data/test_R2.fastq \
 --runID 1 \
 --lane 1 \
 --ref ucsc.hg19.fasta
@@ -97,35 +97,34 @@ python3 pipeline.py from_fastq \
 
 ```shell
 python3 pipeline.py from_bam \
---working_path test_results \
+--working_path example/test_results \
 --sample test \
 --sex male \
---bam test.bam \
---ref_bed ref_test.bed \
---genotypes test_genotypes.txt \
---multiple_alleles test_multiple_alleles.txt \
---qc_matrix test_qc_matrix.txt
+--bam example/test_results/alignments/test.bam \
+--ref_bed example/ref_test.bed \
+--genotypes example/test_results/test_genotypes.txt \
+--multiple_alleles example/test_results/test_multiple_alleles.txt \
+--qc_matrix example/test_results/test_qc_matrix.txt
 ```
 
 2. run with self-defined parameters 
 
 ```shell
 python3 pipeline.py \
---type \
---assemble_pairs \
---reads_threshold \
---stutter_ratio \
---num_threads \
---num_processors \
+--assemble_pairs True \
+--reads_threshold 50 \
+--stutter_ratio 0.6 \
+--num_threads 8 \
+--num_processors 8 \
 from_bam \
---working_path test_results \
+--working_path example/test_results \
 --sample test \
 --sex male \
---bam test.bam \
---ref_bed test.bed \
---genotypes test_genotypes.txt \
---multiple_alleles test_multiple_alleles.txt \
---qc_matrix test_qc_matrix.txt
+--bam example/test_results/alignments/test.bam \
+--ref_bed example/ref_test.bed \
+--genotypes example/test_results/test_genotypes.txt \
+--multiple_alleles example/test_results/test_multiple_alleles.txt \
+--qc_matrix example/test_results/test_qc_matrix.txt
 ```
 
 
