@@ -226,7 +226,7 @@ docker pull anjing123/strsearch:v1
 
 
 ```
-app/
+LOCAL_PATH/app/
 ├── ref
 │   ├── ucsc.hg19.fasta
 │   ├── ucsc.hg19.fasta.amb
@@ -244,7 +244,7 @@ app/
 
 
 ```shell
-docker run -v LOCAL PATH/app/:/app/ -w /app/ -it anjing123/strsearch:v2 from_fastq \
+docker run -v LOCAL_PATH/app/:/app/ -w /app/ -it anjing123/strsearch:v2 from_fastq \
 --working_path /app/test_results/ \
 --sample test \
 --fq1 /app/test_data/test_R1.fastq \
@@ -255,7 +255,7 @@ docker run -v LOCAL PATH/app/:/app/ -w /app/ -it anjing123/strsearch:v2 from_fas
 
 
 ```shell
-docker run -v LOCAL PATH/app/:/app/ -w /app/ -it anjing123/strsearch:v2 from_bam \
+docker run -v LOCAL_PATH/app/:/app/ -w /app/ -it anjing123/strsearch:v2 from_bam \
 --working_path /app/test_results/ \
 --sample test \
 --sex male \
