@@ -18,7 +18,7 @@ from scripts.STR_parse import main as STR_parse
 parser = argparse.ArgumentParser(prog='STRsearch')
 
 parser.add_argument('--type',type=str,default="paired",choices=['paired', 'single'], help='(option) The sequencing type (default: paired)')
-parser.add_argument('--merge_pairs', type =bool,default=False,choices=[False, True],help='(option) if True, paired-end reads are merged (default: False)')
+parser.add_argument('--assemble_pairs', type =bool,default=False,choices=[False, True],help='(option) if True, paired-end reads are assembled (default: False)')
 parser.add_argument('--reads_threshold',type = int,default=30, help='(option) The analytical threshold for reads(default: 30)')
 parser.add_argument('--stutter_ratio',type=float,default=0.5,help='(option) The stutter ratio(default: 0.5)')
 parser.add_argument('--num_threads',type=int, default=4,help='(option) The number of multiple threads (default: 4)')
@@ -64,7 +64,7 @@ elif args.command == 'from_fastq':
     bwa_align(args.sample,args.fq1,args.fq2,args.runID, args.lane,args.ref,args.working_path,args.num_threads)
     bam_file=os.path.join(args.working_path,"alignments",args.sample,".bam")
     sys.exit()
-get_STR_fastq(args.sample,bam_file,args.working_path,args.ref_bed,args.type,args.merge_pairs,args.num_processors)
+get_STR_fastq(args.sample,bam_file,args.working_path,args.ref_bed,args.type,args.assemble_pairs,args.num_processors)
 
 fastq_dir = os.path.join(args.working_path,"STRfq")
 STR_search(args.working_path,args.sample,args.sex,fastq_dir,args.ref_bed,args.reads_threshold,args.num_processors)

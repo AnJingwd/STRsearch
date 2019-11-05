@@ -72,15 +72,50 @@ Note some columns are not used. You can put any value in the non-required column
 
 ### OPTIONS
 
-| Option | Value Type | Default | Summary |
-| ------ | ---------- | ------- | ------- |
-|        |            |         |         |
-|        |            |         |         |
-|        |            |         |         |
-|        |            |         |         |
-|        |            |         |         |
-|        |            |         |         |
-|        |            |         |         |
+**Default parameters**
+
+| Option            | Value Type | Default | Summary                                          |
+| ----------------- | ---------- | ------- | ------------------------------------------------ |
+| --help            |            |         |                                                  |
+| --type            | str        | paired  | (option) The sequencing type                     |
+| --assemble_pairs  | bool       | False   | (option) if True, paired-end reads are assembled |
+| --reads_threshold | int        | 30      | (option) The analytical threshold for reads      |
+| --stutter_ratio   | float      | 0.5     | (option) The stutter ratio                       |
+| --num_threads     | int        | 4       | (option) The number of multiple threads          |
+| --num_processors  | int        | 4       | (option) The number of multiprocess              |
+
+**Sub command**
+
+1. from_bam
+
+| Option             | Value Type | Default | Summary                                      |
+| ------------------ | ---------- | ------- | -------------------------------------------- |
+| --help             |            |         |                                              |
+| --working_path     | str        |         | (must) The working path                      |
+| --sample           | str        |         | (must) The sample name                       |
+| --sex              | str        |         | (must) The sample sex                        |
+| --bam              | str        |         | (must) The input BAM-file                    |
+| --ref_bed          | str        |         | (must) The configuration file of STRs        |
+| --genotypes        | str        |         | (must) The output for STR genotypes          |
+| --multiple_alleles | str        |         | (must) The output for multiple alleles       |
+| --qc_matrix        | str        |         | (must) The output for quality control matrix |
+
+
+
+2. from_fastq
+
+   
+
+| Option         | Value Type | Default | Summary                                                      |
+| -------------- | ---------- | ------- | ------------------------------------------------------------ |
+| --help         |            |         |                                                              |
+| --working_path | str        |         | (must) The working path                                      |
+| --sample       | str        |         | (must) The sample name                                       |
+| --fq1          | str        |         | (must) The input R1_fastq.gz file                            |
+| --fq2          | str        |         | (must) The input R2_fastq.gz file                            |
+| --runID        | str        |         | (must) The runID information                                 |
+| --lane         | str        |         | (must) The lane information                                  |
+| --ref          | str        |         | (must) The reference genome fasta and index file in the same path |
 
 
 

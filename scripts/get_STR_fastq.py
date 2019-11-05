@@ -37,7 +37,7 @@ def get_STR_fq_from_bam(args_list):
     (4)combined forward and reverse stand fastq files 
     
     '''
-    sample,pos,marker_name,bam_file,result_dir,stand,mysamtools, mybamToFastq,myseqtk,myusearch,type,merge_pairs= args_list
+    sample,pos,marker_name,bam_file,result_dir,stand,mysamtools, mybamToFastq,myseqtk,myusearch,type,assemble_pairs= args_list
     COMMAND_index="{0} index -b {1}"
     if not os.path.exists(bam_file+".bai"):
         os.system(COMMAND_index.format(mysamtools,bam_file))
@@ -61,14 +61,14 @@ def get_STR_fq_from_bam(args_list):
         if stand == "+":
             fq_R2_reverse = os.path.join(result_dir,marker_name+"_reads_"+sample+"_R2_trans.fastq")
             os.system(COMMAND_reverse.format(myseqtk,fq_R2,fq_R2_reverse))
-            if merge_pairs ==False:
+            if assemble_pairs ==False:
                 os.system("cat {0} {1}>{2}".format(fq_R1,fq_R2_reverse,merge_fq))
             else:
                 os.system(COMMAND_merge.format(myusearch,fq_R1,fq_R2,merge_fq))
         else:
             fq_R1_reverse = os.path.join(result_dir,marker_name+"_reads_"+sample+"_R1_trans.fastq")
             os.system(COMMAND_reverse.format(myseqtk,fq_R1,fq_R1_reverse))
-            if merge_pairs ==False:
+            if assemble_pairs ==False:
                 os.system("cat {0} {1}>{2}".format(fq_R1_reverse,fq_R2,merge_fq))
             else:
                 os.system(COMMAND_merge.format(myusearch,fq_R1,fq_R2,merge_fq_forward))
@@ -92,7 +92,7 @@ def check_bam_file(bam_file):
         print("Bam file doesn't exist!!")
 
 
-def main(sample,bam_file,working_path,ref_bed,type,merge_pairs,num_processors):
+def main(sample,bam_file,working_path,ref_bed,type,assemble_pairs,num_processors):
     ## get path of linux tools 
     conf_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     config = conf_parse(os.path.join(conf_path,"conf.py"))
@@ -117,7 +117,7 @@ def main(sample,bam_file,working_path,ref_bed,type,merge_pairs,num_processors):
         mylist = line.split("\t")
         pos = mylist[0]+":"+mylist[1]+"-"+mylist[2]
         marker_name,stand = mylist[5],mylist[8]
-        info_list.append([sample,pos,marker_name,bam_file,STR_fastq_dir,stand,mysamtools, mybamToFastq,myseqtk,myusearch,type,merge_pairs])
+        info_list.append([sample,pos,marker_name,bam_file,STR_fastq_dir,stand,mysamtools, mybamToFastq,myseqtk,myusearch,type,assemble_pairs])
         N+=1
 
     pool = Pool(num_processors)
