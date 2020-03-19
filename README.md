@@ -272,7 +272,7 @@ docker run -v LOCAL_PATH/app/:/app/ -w /app/ -it anjing123/strsearch:latest from
 
 ### Reference
 
- The STRsearch publication is available here: 
+ The STRsearch publication is available here:  [STRsearch: a new pipeline for targeted profiling of short tandem repeats in massively parallel sequencing data](https://hereditasjournal.biomedcentral.com/articles/10.1186/s41065-020-00120-6)
 
 
 
